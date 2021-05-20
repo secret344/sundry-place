@@ -2,10 +2,6 @@
 
 -   [sundry-place](README.md)
 
-## react
-
--   [测试](react/untitled-1ceshi.md)
-
 ## 算法
 
 -   常见排序查找
@@ -19,4 +15,12 @@
 
     -   [逻辑运算](arithmetic/base/logical_operation.md)
 
+## 2021 随笔
+
+-   [定时器](2021/Timers.md)
+
 ## RegExp
+
+## react
+
+-   [测试](react/untitled-1ceshi.md)
