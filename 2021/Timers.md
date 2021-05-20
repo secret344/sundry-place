@@ -36,5 +36,28 @@
 
 ### [定时器初始化](https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#timer-initialisation-steps)
 
-* 定时器会生成一个 ***task***,当这个task被执行时,第一步会检查这个handle是否已经在活动定时器列表中被清除，如果已经被清除就放弃执行，最后一步会查看repeat标志，如果是true，就会重新执行定时器初始化，并且使用相同的方法参数、相同的方法上下文以及repeat标志。并将之前的handle设置为handler，如果是false就会从活动定时器列表中删除。
-* 初始化结束会被放入 ***[Queue a global task](https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task)***。
+-   定时器会生成一个 **_task_**,当这个 task 被执行时,第一步会检查这个 handle 是否已经在活动定时器列表中被清除，如果已经被清除就放弃执行，最后一步会查看 repeat 标志，如果是 true，就会重新执行定时器初始化，并且使用相同的方法参数、相同的方法上下文以及 repeat 标志。并将之前的 handle 设置为 handler，如果是 false 就会从活动定时器列表中删除。
+-   初始化结束会被放入 **_[Queue a global task](https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task)_**。
+
+example:
+>  没有任何延迟的情况下运行几毫秒的任务,同时还要迁就浏览器,避免浏览器因占用CPU而杀死script,只需在执行工作之前排队等待下一个定时器。
+```javascript
+function doExpensiveWork() {
+    var done = false;
+    // ...
+    // 多毫秒任务，完成后done = true 
+    // ...
+    return done;
+}
+
+function rescheduleWork() {
+    var handle = setTimeout(rescheduleWork, 0); // 预先安排下一次迭代
+    if (doExpensiveWork()) clearTimeout(handle); // 不需要清除
+}
+
+function scheduleWork() {
+    setTimeout(rescheduleWork, 0);
+}
+
+scheduleWork(); 
+```
