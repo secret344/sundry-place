@@ -40,12 +40,14 @@
 -   初始化结束会被放入 **_[Queue a global task](https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task)_**。
 
 example:
->  没有任何延迟的情况下运行几毫秒的任务,同时还要迁就浏览器,避免浏览器因占用CPU而杀死script,只需在执行工作之前排队等待下一个定时器。
+
+> 没有任何延迟的情况下运行几毫秒的任务,同时还要迁就浏览器,避免浏览器因占用 CPU 而杀死 script,只需在执行工作之前排队等待下一个定时器。
+
 ```javascript
 function doExpensiveWork() {
     var done = false;
     // ...
-    // 多毫秒任务，完成后done = true 
+    // 多毫秒任务，完成后done = true
     // ...
     return done;
 }
@@ -59,5 +61,5 @@ function scheduleWork() {
     setTimeout(rescheduleWork, 0);
 }
 
-scheduleWork(); 
+scheduleWork();
 ```
