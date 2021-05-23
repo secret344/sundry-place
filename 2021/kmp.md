@@ -60,7 +60,8 @@
 
 > 我们根据过程可以知道这个[匹配表](/2021/kmp.md#bu-fen-pi-pei-biao-next),其实就是当前索引之前的字符是否含有与原字符串首部开始重复的字符。
 > 很多教程在这里就是说真前缀 真后缀，而且很多都是复制粘贴回答......
-> next 表也可以说是 i 之前的字符串中，有多大长度的相同 前缀后缀。
+> next 表也可以说是 i 之前的字符串中，有多大长度的相同真前缀后缀。
+> 这里是所谓的真就是不包含自己，也就是说，真前缀就是 i之前不包含i - 1的前缀，真前缀就是 i之前不包含0的后缀。
 >
 > 还是以 ABCDABD 为例求
 
@@ -73,27 +74,27 @@
 
 ```
     ABCDABD
-    0000
+    00000
 ```
 
 B: 前缀 A 后缀无
 
 C: 前缀 A AB 后缀 B 相同无
 
-D: 前缀 A AB ABC 后缀 C BC
+D: 前缀 A AB 后缀 C BC
 
-A: 前缀 A AB ABC ABCD 后缀 C BC BCD
+A: 前缀 A AB ABC 后缀 D CD BCD
 
 ```
     ABCDABD
     0000012
 ```
 
-B: 前缀 A ABC ABCD ABCDA 后缀 A DA CDA BCDA 相同 A 赋值为 1
+B: 前缀 A AB ABC ABCD 后缀 A DA CDA BCDA 相同 A 赋值为 1
 
-D: 前缀 A ABC ABCD ABCDA ABCDAB 后缀 B AB DAB CDAB BCDAB 相同 AB 赋值为 2
+D: 前缀 A AB ABC ABCD ABCDA 后缀 B AB DAB CDAB BCDAB 相同 AB 赋值为 2
 
-综上 next 表为 [0,0,0,0,0,1,2]。到这里我们可以发现其实就是自己前面含有从首部开始的重复字符数量。很多人都是以-1 开头，这个我们后面解释，其实我觉得算作个人习惯吧。
+综上 next 表为 [0,0,0,0,0,1,2]。到这里我们可以发现求得其实就是自己前面含有从首部开始的重复字符数量。很多人都是以-1 开头，这个我们后面解释，其实我觉得算作个人习惯吧。
 
 ## 代码实现
 
