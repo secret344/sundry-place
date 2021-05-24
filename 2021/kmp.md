@@ -79,7 +79,7 @@
 
 ```
     ABCDABD
-    00000
+    00001
 ```
 
 B: 真前缀 A 真后缀 B 无
@@ -92,7 +92,7 @@ A: 真前缀 A AB ABC ABCD 真后缀 A DA CDA BCDA 相同 A 赋值为 1
 
 ```
     ABCDABD
-    0000012
+    0000120
 ```
 
 B: 真前缀 A AB ABC ABCD ABCDA 真后缀 B AB DAB CDAB BCDAB 相同 AB 赋值为 2
