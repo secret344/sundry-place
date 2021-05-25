@@ -107,7 +107,55 @@ D: 真前缀 A AB ABC ABCD ABCDA ABCDAB 真后缀 D BD ABD DABD CDABD BCDABD 相
 
 > 我们还是以上面的为测试用例。
 
--   首先求 next TODO
+-   首先求 next
     ```
-        TODO
+        let W = ABCDABD;
+        let len = w.length;
+        let next = new Array(len).fill(0);
+        let now = 0; // 当前重复索引
+        let index = 1; // 当前索引
+        while(index < len){
+            if(W[now] === W[index]){
+                // 当左边与右边存在重复时
+                now++;
+                next[index] = now; // 此索引下重复数量加1
+                index++; // 更新索引
+            } else if(now > 0){
+                // 当不存在相等重复时,判断now是否大于0，大于则更新
+                // eg ABABD 当检查D时now为2,W[2] !== W[4],此时我们下一步需要判断W[1]是否跟W[4]相同
+                // 至于为什么这里会更新为next[now - 1]，是因为每次我们的判断都是从头开始。
+                // eg AACDEAAA [0,1,0,0,0,1,2,2]
+                now = next[now - 1];
+            }else{
+                // 此时now为0 不存在重复
+                next[index] = 0;
+                index++;
+            }
+        }
     ```
+- 查找
+```
+    let W = ABCDABD;
+    let S = "ABC ABCDAB ABCDABCDABDE";
+    let pos = 0;
+    let index = 0;
+    while(index < S.length){
+        if(S[index] === W[pos]){
+            // 相等索引更新
+            pos++;
+            index++;
+        }else if(pos !== 0){
+            // 不相等，且此时匹配的数量不为0
+            // 根据当前匹配位置，去next表查询重复数量，作为下次跳过索引。
+            pos = next[pos - 1];
+        }else{
+            // 都不符合 更新索引
+            i++;
+        }
+
+        if(pos === W.length){
+           // 匹配结束了
+           return
+        }
+    }
+```
