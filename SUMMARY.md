@@ -14,12 +14,13 @@
 -   基本常识
 
     -   [逻辑运算](arithmetic/base/logical_operation.md)
-    -   [KMP算法](2021/kmp.md)
+    -   [KMP 算法](2021/kmp.md)
 
 ## 2021 随笔
 
+-   [typescript 装饰器](2021/decorators.md)
+-   [KMP 算法](2021/kmp.md)
 -   [定时器](2021/Timers.md)
--   [KMP算法](2021/kmp.md)
 
 ## RegExp
 
