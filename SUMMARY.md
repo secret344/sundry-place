@@ -18,10 +18,10 @@
 
 *   2021 随笔
 
--   [节流函数](2021/throttle.md)
--   [typescript 装饰器](2021/decorators.md)
--   [定时器](2021/Timers.md)
--   [KMP 算法](2021/kmp.md)
+    -   [节流函数](2021/throttle.md)
+    -   [typescript 装饰器](2021/decorators.md)
+    -   [定时器](2021/Timers.md)
+    -   [KMP 算法](2021/kmp.md)
 
 *   RegExp
 
