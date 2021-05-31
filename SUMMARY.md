@@ -2,28 +2,35 @@
 
 -   [sundry-place](README.md)
 
-## 算法
+*   算法
 
--   常见排序查找
+    -   常见排序查找
 
--   前缀和
+    -   前缀和
 
-    -   [注解](arithmetic/PrefixSum/note.md)
-    -   [1738. 找出第 K 大的异或坐标值](arithmetic/PrefixSum/1738.md)
+        -   [注解](arithmetic/PrefixSum/note.md)
+        -   [1738. 找出第 K 大的异或坐标值](arithmetic/PrefixSum/1738.md)
 
--   基本常识
+    -   基本常识
 
     -   [逻辑运算](arithmetic/base/logical_operation.md)
     -   [KMP 算法](2021/kmp.md)
 
-## 2021 随笔
+*   2021 随笔
 
 -   [节流函数](2021/throttle.md)
+-   [typescript 装饰器](2021/decorators.md)
 -   [定时器](2021/Timers.md)
 -   [KMP 算法](2021/kmp.md)
 
-## RegExp
+*   RegExp
 
-## react
+*   react
 
--   [测试](react/untitled-1ceshi.md)
+    -   [测试](react/untitled-1ceshi.md)
+
+*   typescript
+
+    -   [typescript 装饰器](2021/decorators.md)
+
+*   HTML + CSS
