@@ -5,7 +5,7 @@
 *   算法
 
     -   常见排序查找
-
+        -   [十大经典排序](2021/sort.md)
     -   前缀和
 
         -   [注解](arithmetic/PrefixSum/note.md)
@@ -18,6 +18,7 @@
 
 *   2021 随笔
 
+    -   [十大经典排序](2021/sort.md)
     -   [节流函数](2021/throttle.md)
     -   [typescript 装饰器](2021/decorators.md)
     -   [定时器](2021/Timers.md)
