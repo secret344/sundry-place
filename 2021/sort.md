@@ -161,7 +161,7 @@ function sort(arr, baseIndex = 0) {
     arr[sortIndex] = arr[right - 1];
     arr[right - 1] = temp;
     return sort(arr.slice(0, sortIndex), baseIndex).concat(
-        [base],
+        arr[sortIndex],
         sort(arr.slice(sortIndex + 1), baseIndex)
     );
 }
