@@ -1,5 +1,7 @@
 # 十大经典排序算法
 
+## 附:[排序算法](https://zh.wikipedia.org/wiki/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95)
+
 ## 1.冒泡排序
 
 > 重复比较要排序的数组相邻单位，顺序错误就互相交换位置。直到不再进行交换，表明排序结束。
@@ -206,6 +208,58 @@ function sort(arr) {
 
 ## 8.计数排序
 
+> 找到数组中的最大元素和最小元素。新建数组 c
+>
+> 统计数组中每个元素值为 i 出现的次数，存入数组 c 的第 i 项。
+>
+> 对所有的计数累加（从 C 中的第一个元素开始，每一项和前一项相加）；
+>
+> 反向填充目标数组：将每个元素 i 放在新数组的第 C[i]项，每放一个元素就将 C[i]减去 1
+
+> 不放代码了，比较简单，不适合范围很大的排序，需要大量时间和内存。但是，计数排序可以用在基数排序算法中，能够更有效的排序数据范围很大的数组。
+> 想看代码的话建议去[wiki](https://zh.wikipedia.org/wiki/%E8%AE%A1%E6%95%B0%E6%8E%92%E5%BA%8F)，下面的基数排序也会用到计数排序。
+
 ## 9.桶排序
 
 ## 10.基数排序
+
+> 原理是将整数按位数切割成不同的数字，然后按每个位数分别比较。
+>
+> 将所有待比较数值（正整数）统一为同样的数位长度，数位较短的数前面补零。然后，从最低位开始，依次进行一次排序。这样从最低位排序一直到最高位排序完成以后，数列就变成一个有序序列。
+>
+> 取到最大数，确定位数。
+>
+> 原数组开始从最低位组成基数（radix）数组。
+>
+> 对基数数组进行计数排序（计数排序适用于小范围数的特点）
+
+```javascript
+function sort(arr) {
+    let mod = 10,
+        divisor = 1; // 取出当前位,  (n % 10) / 1 然后取整就是个位。
+    let counter = [];
+    let maxDigit = (Math.max(...arr) + "").length;
+    for (let i = 0; i < maxDigit; i++) {
+        // 计数排序
+        for (let j = 0; j < arr.length; j++) {
+            let digit = parseInt((arr[j] % mod) / divisor);
+            if (!counter[digit]) {
+                counter[digit] = [];
+            }
+            // 将当前元素放入计数排序数组相应的下标中
+            counter[digit].push(arr[j]);
+        }
+        let pos = 0; //重新排列的原数组下标
+        for (let j = 0; j < counter.length; j++) {
+            // 取出计数排序数组项，重新排列原数组。
+            while (!!counter[j] && counter[j].length) {
+                let curset = counter[j].shift();
+                arr[pos++] = curset;
+            }
+        }
+        mod *= 10;
+        divisor *= 10;
+    }
+    return arr;
+}
+```
