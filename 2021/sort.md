@@ -124,6 +124,84 @@ function sort(arr) {
 
 ## 6.快速排序
 
+> 挑选基准值
+>
+> 分割，将所有比基准值小的放入一边，大的放入另外一边。
+>
+> 递归排序子序列.
+
+> 示例,两种不同的分割方法。
+
+```javascript
+function sort(arr, baseIndex = 0) {
+    let left = 0,
+        right = arr.length;
+    if (right - 1 <= left) {
+        return arr;
+    }
+    let base = arr[baseIndex];
+    // 将基准位置放入最后一项
+    arr[baseIndex] = arr[right - 1];
+    arr[right - 1] = base;
+    // 当前小于基准值的位置。
+    // 最终作为分割点。
+    let sortIndex = left;
+    for (let i = left; i < right - 1; i++) {
+        let ele = arr[i];
+        if (ele <= base) {
+            // 小于等于基准位，则讲其与sortIndex位置的元素替换，sortIndex+1
+            // sortIndex之前的位置保证全部小于等于基准位
+            arr[i] = arr[sortIndex];
+            arr[sortIndex] = ele;
+            sortIndex = sortIndex + 1;
+        }
+    }
+    // 将基准位与sortIndex位互换,保证左边小于等于它，右边大于它
+    let temp = arr[sortIndex];
+    arr[sortIndex] = arr[right - 1];
+    arr[right - 1] = temp;
+    return sort(arr.slice(0, sortIndex), baseIndex).concat(
+        [base],
+        sort(arr.slice(sortIndex + 1), baseIndex)
+    );
+}
+```
+
+```javascript
+function quick(arr) {
+    if (arr.length <= 1) {
+        return arr;
+    }
+    let base = arr[0],
+        left = 0,
+        right = arr.length - 1;
+    while (left <= right) {
+        if (left === right) {
+            // 当查找完毕，将基准值放入最终索引位（也就是分割点）。
+            arr[0] = arr[left];
+            arr[left] = base;
+            break;
+        }
+        // 找到左侧大于基准值的项目
+        while (left < right && arr[right] >= base) {
+            right--;
+        }
+        // 找到右侧大于基准值的项目
+        while (left < right && arr[left] <= base) {
+            left++;
+        }
+        // 替换两个元素。
+        // 将小于基准值的元素放到前面。继续查找满足条件项
+        let temp = arr[left];
+        arr[left] = arr[right];
+        arr[right] = temp;
+    }
+    return quick(arr.slice(0, left))
+        .concat(arr[left])
+        .concat(quick(arr.slice(left + 1)));
+}
+```
+
 ## 7.堆排序
 
 ## 8.计数排序
