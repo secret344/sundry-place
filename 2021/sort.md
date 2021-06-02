@@ -168,7 +168,7 @@ function sort(arr, baseIndex = 0) {
 ```
 
 ```javascript
-function quick(arr) {
+function sort(arr) {
     if (arr.length <= 1) {
         return arr;
     }
