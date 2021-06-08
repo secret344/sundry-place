@@ -26,8 +26,8 @@
         -   [十大经典排序](2021/sort.md)
         -   [节流函数](2021/throttle.md)
     -   5 月
-        -   [typescript 装饰器](2021/decorators.md)
-        -   [定时器](2021/Timers.md)
+        -   [typescript 装饰器](typescript/decorators.md)
+        -   [定时器](html+css/Timers.md)
         -   [KMP 算法](2021/kmp.md)
 
 *   RegExp
@@ -39,11 +39,12 @@
 
 *   typescript
 
-    -   [typescript 装饰器](2021/decorators.md)
+    -   [typescript 装饰器](typescript/decorators.md)
 
 *   javascript
     -   [bind 简单实现](javascript/bind.md)
 *   HTML + CSS
+    -   [定时器](html+css/Timers.md)
 *   计算机网络
     -   [http](network/http.md)
     -   [tcp](network/tcp.md)
