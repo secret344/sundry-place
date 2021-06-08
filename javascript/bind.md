@@ -76,19 +76,19 @@ function bind(context, ...args) {
         // bind 作用于函数
         throw new TypeError(ERROR_MESSAGE + self);
     }
+    let Empty = function Empty() {};
     let boundFun = function () {
-        if (this instanceof boundFun) {
+        // boundFun的prototype在后面被我们赋值为Empty的实例
+        if (this instanceof Empty) {
             return self.apply(this, [...arguments, ...args]);
         }
         return self.apply(context, [...arguments, ...args]);
     };
-    if (self.prototype) {
-        // 为了修改boundFun.prototype不会影响原绑定函数
-        let Empty = function Empty() {};
-        Empty.prototype = self.prototype;
-        boundFun.prototype = new Empty();
-        Empty.prototype = null;
-    }
+    // 为了修改boundFun.prototype不会影响原绑定函数
+    Empty.prototype = self.prototype;
+    boundFun.prototype = new Empty();
+    Empty.prototype = null;
+
     return boundFun;
 }
 ```
