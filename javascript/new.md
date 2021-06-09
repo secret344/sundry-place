@@ -67,7 +67,15 @@ function mynew() {
 
 ## tips:
 
+-   prototype
+
+    > Object.prototype 属性表示 Object 的原型对象
+
 -   \_proto\_
     > **proto** 属性是一个访问器属性（一个 getter 函数和一个 setter 函数）, 暴露了通过它访问的对象的内部[[Prototype]] (一个对象或 null)。
     >
     > 更推荐使用 Object.getPrototypeOf/Reflect.getPrototypeOf 和 Object.setPrototypeOf/Reflect.setPrototypeOf
+-   constructor
+    > 返回创建实例对象的 Object 构造函数的引用。注意，此属性的值是对函数本身的引用，而不是一个包含函数名称的字符串。对原始类型来说，如 1，true 和"test"，该值只可读。
+    >
+    > 所有对象都会从它的原型上继承一个 constructor 属性
