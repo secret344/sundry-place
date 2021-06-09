@@ -22,6 +22,7 @@
         -   [React 的 scheduler](react/scheduler.md)
         -   [http](network/http.md)
         -   [tcp](network/tcp.md)
+        -   [call、apply 简单实现](javascript/apply_call.md)
         -   [bind 简单实现](javascript/bind.md)
         -   [十大经典排序](2021/sort.md)
         -   [节流函数](2021/throttle.md)
@@ -42,6 +43,7 @@
     -   [typescript 装饰器](typescript/decorators.md)
 
 *   javascript
+    -   [call、apply 简单实现](javascript/apply_call.md)
     -   [bind 简单实现](javascript/bind.md)
 *   HTML + CSS
     -   [定时器](html+css/Timers.md)
