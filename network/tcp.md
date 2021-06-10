@@ -18,7 +18,7 @@
 ### 创建连接(三次握手)
 
 [<img height="300" width="800" src="../assets/network/tcpconnect.png"/>](../assets/network/tcpconnect.png)
-<div><img height="300" width="800" src="../assets/network/tcpconnect.png"/></div>
+<p><img height="300" width="800" src="../assets/network/tcpconnect.png"/></p>
 1. 客户端（通过执行 connect 函数）向服务器端发送一个 SYN 包，请求一个主动打开。该包携带客户端为这个连接请求而设定的随机数 X 作为消息序列号。
 2. 服务器端收到一个合法的 SYN 包后，把该包放入 SYN 队列中；回送一个 SYN/ACK。ACK 的确认码应为 X+1，SYN/ACK 包本身携带一个随机产生的序号 Y。
 3. 客户端收到 SYN/ACK 包后，发送一个 ACK 包，该包的序号被设定为 X+1，而 ACK 的确认码则为 Y+1。然后客户端的 connect 函数成功返回。当服务器端收到这个 ACK 包的时候，把请求帧从 SYN 队列中移出，放至 ACCEPT 队列中；这时 accept 函数如果处于阻塞状态，可以被唤醒，从 ACCEPT 队列中取出 ACK 包，重新创建一个新的用于双向通信的 sockfd，并返回。
