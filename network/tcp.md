@@ -17,7 +17,7 @@
 
 -   创建连接(三次握手)
 
-    <img height="300" width="800" src="../assets/network/tcpconnect.png"/>
+    [<img height="300" width="800" src="../assets/network/tcpconnect.png"/>](../assets/network/tcpconnect.png)
 
     1. 客户端（通过执行 connect 函数）向服务器端发送一个 SYN 包，请求一个主动打开。该包携带客户端为这个连接请求而设定的随机数 X 作为消息序列号。
     2. 服务器端收到一个合法的 SYN 包后，把该包放入 SYN 队列中；回送一个 SYN/ACK。ACK 的确认码应为 X+1，SYN/ACK 包本身携带一个随机产生的序号 Y。
@@ -64,7 +64,7 @@
 
 -   关闭连接(四次挥手)
 
-    <img height="300" width="800" src="../assets/network/TCPCLOSE.png"/>
+    [<img height="300" width="800" src="../assets/network/TCPCLOSE.png"/>](../assets/network/TCPCLOSE.png)
 
     -   想要终结连接的一端，向对方发出 FIN
     -   对方回复 ACK 表示确认，
