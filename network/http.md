@@ -2,4 +2,4 @@
 
 ## http 历史
 
-[详情查看](http-history.md)
+[详情查看->github](http-history.md)
