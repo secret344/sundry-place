@@ -37,7 +37,8 @@ HTTP/1.1 定义了 **[Cache-Control](https://developer.mozilla.org/zh-CN/docs/We
 -   私有，公共缓存
     -   public
         > 公共缓存，可以被中间人（CDN,代理服务器）缓存。
-    -   private 私有缓存（默认）,响应是单个用户的，只会被浏览器私有缓存，中间人不能缓存响应。
+    -   private（默认）
+        > 私有缓存,响应是单个用户的，只会被浏览器私有缓存，中间人不能缓存响应。
 
 ```
     Cache-Control: private
