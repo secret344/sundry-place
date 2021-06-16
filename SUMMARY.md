@@ -51,4 +51,6 @@
     -   [定时器](html+css/Timers.md)
 *   计算机网络
     -   [http](network/http.md)
+        -   [http 缓存](network/http-cache.md)
+        -   [http 历史](network/http-history.md)
     -   [tcp](network/tcp.md)
