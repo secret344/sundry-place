@@ -2,8 +2,8 @@
 
 ## http 历史
 
-[详情查看->github](http-history.md)
+[详情查看](http-history.md)
 
 ## http 缓存
 
-[详情查看->github](http-cache.md)
+[详情查看](http-cache.md)
