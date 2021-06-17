@@ -46,6 +46,7 @@ HTTP/1.1 定义了 **[Cache-Control](https://developer.mozilla.org/zh-CN/docs/We
 ```
 
 -   过期
+
     > 过期机制中，最重要的是 "max-age=\<seconds>",表示最大缓存时间，相对于 Expires 来说，max-age 是距离请求发起的时间的**秒数**。针对应用中那些不会改变的文件，通常可以手动设置一定的时长以保证缓存有效，例如图片、css、js 等静态资源。
 
 ```
@@ -76,30 +77,6 @@ HTTP/1.1 定义了 **[Cache-Control](https://developer.mozilla.org/zh-CN/docs/We
 
 -   Expires
     > Expires 响应头包含日期/时间， 即在此时候之后，响应过期。如果在 Cache-Control 响应头设置了 "max-age" 或者 "s-max-age" 指令，那么 Expires 头会被忽略。
--   If-None-Match
-    > 一个条件式请求首部
-    ```
-        If-None-Match: <etag_value>
-        If-None-Match: <etag_value>, <etag_value>, …
-        If-None-Match: *
-    ```
-    -   \<etag_value>
-        > 请求实体
-    -   \*
-        > 任意资源，在资源上传时使用，通常时 PUT 方法，来检测是否拥有相同识别 ID 的资源已经被上传
--   If-Modified-Since
-
-    -   服务器只在所请求的资源在给定的日期时间之后对内容进行过修改的情况下才会将资源返回,如果请求的资源从那时起未经修改，那么返回一个不带有消息主体的 304 响应，而在 Last-Modified 首部中会带有上次修改时间。
-    -   当存在 If-None-Match 时候它会被忽略，除非服务器不支持 If-None-Match。
-
-    -   条件式请求首部,只可以用在 GET 或 HEAD 请求中。
-
-    ```
-        If-Modified-Since: <day-name>, <day> <month> <year> <hour>:<minute>:<second> GMT
-    ```
-
--   If-Unmodified-Since
-    > 只有当资源在指定的时间之后没有进行过修改的情况下，服务器才会返回请求的资源，或是接受 POST 或其他 non-safe 方法的请求。如果所请求的资源在指定的时间之后发生了修改，那么会返回 412 (Precondition Failed) 错误。
 
 对于含有特定信息的头，回去计算缓存寿命。比如 Cache-Control: max-age=N，相应的缓存寿命就是 N。通常不含这个属性是回去查看 Expires 属性，通过比较 Expires 值与头里面的 Date(报文创建的日期和时间) 属性的值来判断是否缓存有效。如果 max-age 和 expires 属性都不存在，会查找头里面的 Last-Modified 信息，如果有，缓存的寿命就等于头里面 Date 的值减去 Last-Modified 的值除以 10（rfc2626）。
 
@@ -114,7 +91,7 @@ HTTP/1.1 定义了 **[Cache-Control](https://developer.mozilla.org/zh-CN/docs/We
 
 -   ETags 强校验
     -   资源的特定版本标识符，对于浏览器这样的 HTTP UA，不知道 ETag 代表什么，不能预测它的值是多少。如果资源请求的响应头里含有 ETag, 客户端可以在后续的请求的头中带上 If-None-Match 头来验证缓存。
-    -   搭配 If-Match(条件请求) 来避免空中碰撞,与 If-Unmodified-Since 作用相似，但是 ETag 更加精确。
+    -   搭配 If-Match(条件请求) 来避免空中碰撞。
 -   Last-Modified 弱校验
     -   说它弱是因为它只能精确到一秒。
     -   如果响应头里含有这个信息，客户端可以在后续的请求中带上 If-Modified-Since 来验证缓存。
@@ -131,3 +108,70 @@ eg:
 ```
     Vary: User-Agent
 ```
+
+## 条件匹配
+
+-   If-Match
+
+如果源服务器选择的表示存在，则该方法应该执行，如果表示不存在，则不得执行。语法与 If-None-Match 相似
+
+> 在请求方法为 GET 和 HEAD 的情况下，服务器仅在请求的资源满足此首部列出的 ETag 值时才会返回资源。而对于 PUT 或其他非安全方法来说，只有在满足条件的情况下才可以将资源上传。
+
+> ETag 之间的比较使用的是强比较算法，即只有在每一个字节都相同的情况下，才可以认为两个文件是相同的。在 ETag 前面添加 W/ 前缀表示可以采用相对宽松的算法。
+
+常见场景：
+
+1. 搭配 Range 首部使用，保证范围请求与之前请求的资源是同一份，Etag 不匹配返回 416(范围请求无法满足)。
+2. PUT 避免更新丢失问题。不满足返回 412(先决条件失败)。
+
+-   If-None-Match
+
+    -   对于 GET 和 HEAD 请求方法来说，当服务器没有任何资源 ETag 属性值与该首部列出的相匹配时，服务器返回请求的资源，响应码 200，对于其他方法来说，当且仅当最终确认没有已存在的资源的 ETag 属性值与这个首部中所列出的相匹配的时候，才会对请求进行相应的处理。
+
+    -   对于 GET 和 HEAD 请求方法来说,验证失败时，服务端必须返回 304。对于引起服务断状态改变的方法，返回 412。（返回 304 响应码时候，必须同时生成会存在与响应码 200 响应中的首部：Cache-Control、Content-Location、Date、ETag、Expires 和 Vary）
+
+    -   ETag 属性之间的比较采用的是弱比较算法，即两个文件除了每个比特都相同外，内容一致也可以认为是相同的。例如，如果两个页面仅仅在页脚的生成时间有所不同，就可以认为二者是相同的。
+
+    -   语法
+        -   \<etag_value>
+            > 请求实体
+        -   \*
+            > 任意资源，在资源上传时使用，通常时 PUT 方法，来检测是否拥有相同识别 ID 的资源已经被上传
+
+    ```
+        If-None-Match: <etag_value>
+        If-None-Match: <etag_value>, <etag_value>, …
+        If-None-Match: *
+    ```
+
+-   If-Modified-Since
+
+    -   服务器只在所请求的资源在给定的日期时间之后对内容进行过修改的情况下才会将资源返回,如果请求的资源从那时起未经修改，那么返回一个不带有消息主体的 304 响应，而在 Last-Modified 首部中会带有上次修改时间。
+    -   当存在 If-None-Match 时候它会被忽略，除非服务器不支持 If-None-Match。
+
+    -   条件式请求首部,只可以用在 GET 或 HEAD 请求中。
+
+    ```
+        If-Modified-Since: <day-name>, <day> <month> <year> <hour>:<minute>:<second> GMT
+    ```
+
+-   If-Unmodified-Since
+
+    > 只有当资源在指定的时间之后没有进行过修改的情况下，服务器才会返回请求的资源，或是接受 POST 或其他 non-safe 方法的请求。如果所请求的资源在指定的时间之后发生了修改，那么会返回 412 (Precondition Failed) 错误。
+
+-   If-Range
+
+    -   当字段值中的条件得到满足时，Range 头字段才会起作用，同时服务器回复 206 （部分内容状态码），以及 Range 字段中的相应部分；如果字段中的值没有满足，返回 200，并且返回完整的请求资源。
+
+    -   字段值中既可以用 Last-Modified 时间值用作验证，也可以用 ETag 标记作为验证，但不能将两者同时使用。
+
+    -   If-Range 头字段通常用于断点续传的下载过程中，用来自从上次中断后，确保下载的资源没有发生改变。
+
+    -   语法
+
+        ```
+        If-Range: <day-name>, <day> <month> <year> <hour>:<minute>:<second> GMT
+
+        If-Range: <etag>
+
+        ```
