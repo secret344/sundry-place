@@ -91,18 +91,19 @@ eg: 设置，Path=/docs，则以下地址都会匹配
 
 ### SameSite 属性
 
-    允许服务器要求某个 cookie 在跨站请求时不会被发送
+允许服务器要求某个 cookie 在跨站请求时不会被发送
 
-    -   None
+-   None
 
-        浏览器会在同站、跨站请求下继续发送 Cookie，不区分大小写。
+    浏览器会在同站、跨站请求下继续发送 Cookie，不区分大小写。
 
-    -   Strict
+-   Strict
 
-        浏览器只在相同站点时发送Cookie（在原有 Cookies 的限制条件上的加强，如上文 “Cookie 的作用域” 所述）
-    -   Lax
+    浏览器只在相同站点时发送 Cookie（在原有 Cookies 的限制条件上的加强，如上文 “Cookie 的作用域” 所述）
 
-        类似Strict，但是当用户从外部站点导航至URL时（通过链接）除外。在新版本浏览器为默认选项，Same-site cookies 将会为一些跨站子请求保留，如图片加载或者 frames 的调用，但只有当用户从外部站点导航到URL时才会发送。如 link 链接
+-   Lax
+
+    类似 Strict，但是当用户从外部站点导航至 URL 时（通过链接）除外。在新版本浏览器为默认选项，Same-site cookies 将会为一些跨站子请求保留，如图片加载或者 frames 的调用，但只有当用户从外部站点导航到 URL 时才会发送。如 link 链接
 
 ### Cookie 前缀
 
@@ -116,5 +117,4 @@ eg: 设置，Path=/docs，则以下地址都会匹配
 
 -   \_\_Secure-
 
-        与 \_\_Host- 前缀相似，但是限制弱，如果存在此前缀，并且它存在 Secure 属性标记，是从安全来源发送的，它才在 Set-Cookie 标头中接受。
-
+    与 \_\_Host- 前缀相似，但是限制弱，如果存在此前缀，并且它存在 Secure 属性标记，是从安全来源发送的，它才在 Set-Cookie 标头中接受。
