@@ -56,4 +56,65 @@
 保证 Cookie 在发送时不被其他脚本或者其他参与者（例如 xss,中间人攻击）访问。
 
 -   Secure
+
+通过标记为 Secure 属性的 Cookie 应当被 HTTPS 协议加密后发送给服务器，因此可以预防中间人攻击，但是尽管如此，也不应在 Cookie 中存储敏感信息，毕竟 Cookie 是存储在本地的。
+
+> 从 Chrome 52 和 Firefox 52 开始，不安全的站点（http:）无法使用 Cookie 的 Secure 标记。
+
 -   HttpOnly
+
+Document.cookie 无法获取 HttpOnly 标记的 Cookie；可以缓解 xss 攻击
+
+### Cookie 的作用域
+
+允许 Cookie 应该发送给哪些 URL
+
+-   Domain
+
+规定那些主机可以接受 Cookie，不指定默认为 Origin 不包含子域名。指定后一般包含子域名。
+
+eg: Domain=mozilla.org 则可以包含在 developer.mozilla.org 中。
+
+> 当前大多数浏览器遵循 RFC 6265，设置 Domain 时 不需要加前导点。浏览器不遵循该规范，则需要加前导点，例如：Domain=.mozilla.org
+
+-   Path
+
+规定了主机下那个路径可以接受 Cookie（该 URL 路径必须存在于请求 URL 中）。以字符 %x2F(/)作为路径分隔符号，子路径也会匹配。
+
+eg: 设置，Path=/docs，则以下地址都会匹配
+
+    /docs
+
+    /docs/Web/
+
+    /docs/Web/HTTP
+
+### SameSite 属性
+
+    允许服务器要求某个 cookie 在跨站请求时不会被发送
+
+    -   None
+
+        浏览器会在同站、跨站请求下继续发送 Cookie，不区分大小写。
+
+    -   Strict
+
+        浏览器只在相同站点时发送Cookie（在原有 Cookies 的限制条件上的加强，如上文 “Cookie 的作用域” 所述）
+    -   Lax
+
+        类似Strict，但是当用户从外部站点导航至URL时（通过链接）除外。在新版本浏览器为默认选项，Same-site cookies 将会为一些跨站子请求保留，如图片加载或者 frames 的调用，但只有当用户从外部站点导航到URL时才会发送。如 link 链接
+
+### Cookie 前缀
+
+服务器无法确定 Cookie 是否是安全来源设定的，甚至无法确定最初的设置来源。子域易受攻击的应用程序可以使用 Domain 属性设定 Cookie，从而可以在用户访问父域（或者其他子域）上的页面时，应用程序可能会信任用户 Cookie 发送的现有值。这可能允许用户在登陆后绕过 CSPF 保护或劫持会话。
+
+> 在应用程序服务器上，Web 应用程序必须检查完整的 cookie 名称，包括前缀 —— 用户代理程序在从请求的 Cookie 标头中发送前缀之前，不会从 cookie 中剥离前缀。
+
+-   \_\_Host-
+
+    如果 Cookie 存在此前缀，并且它存在 Secure 属性标记，也是从安全来源发送的，不包括 Domain 属性，Path 属性也为/时，它才在 Set-Cookie 标头中接受（domain-locked）。
+
+-   \_\_Secure-
+
+        与 \_\_Host- 前缀相似，但是限制弱，如果存在此前缀，并且它存在 Secure 属性标记，是从安全来源发送的，它才在 Set-Cookie 标头中接受。
+
