@@ -11,3 +11,7 @@
 ## http Cookies
 
 [详情查看](http-cookies.md)
+
+## 跨源资源共享（CORS）
+
+[详情查看](network/http-cors.md)
