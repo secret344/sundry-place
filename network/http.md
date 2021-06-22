@@ -14,4 +14,4 @@
 
 ## 跨源资源共享（CORS）
 
-[详情查看](network/http-cors.md)
+[详情查看](http-cors.md)
