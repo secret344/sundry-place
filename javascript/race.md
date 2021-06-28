@@ -96,37 +96,38 @@ function promiseCreator({ timeout, data }) {
 
 ## 整理代码
 
-    ```javascript
-        function fetchController(limit, fetchArr) {
-            // promise化所有请求，根据实际自行增删，这里只是想到就写了
-            // 保留了原本请求结束的结果，可以利用这个实现Promise.all 类似效果（除非原本请求没有接受请求结果，或者原本请求接收请求结果之后return 了这个结果，原因参见promise的链式调用）
-            let createPromise = (ele, index) => {
-                return Promise.resolve(ele()).then(
-                    (res) => {
-                        return { res, index };
-                    },
-                    (rej) => {
-                        return { rej, index };
-                    }
-                );
+```javascript
+    function fetchController(limit, fetchArr) {
+        // promise化所有请求，根据实际自行增删，这里只是想到就写了
+        // 保留了原本请求结束的结果，可以利用这个实现Promise.all 类似效果（除非原本请求没有接受请求结果，
+        // 或者原本请求接收请求结果之后return 了这个结果，原因参见promise的链式调用）
+        let createPromise = (ele, index) => {
+            return Promise.resolve(ele()).then(
+                (res) => {
+                    return { res, index };
+                },
+                (rej) => {
+                    return { rej, index };
+                }
+            );
+        };
+
+        let baseHttp = fetchArr
+            .splice(0, limit)
+            .map((item, index) => createPromise(item, index));
+
+        let promise = Promise.race(baseHttp);
+        for (let i = 0; i < fetchArr.length; i++) {
+            const ele = fetchArr[i];
+            let finally = (res) => {
+                let index = res.index;
+                baseHttp[index] = createPromise(ele, index);
+                return Promise.race(baseHttp);
             };
-
-            let baseHttp = fetchArr
-                .splice(0, limit)
-                .map((item, index) => createPromise(item, index));
-
-            let promise = Promise.race(baseHttp);
-            for (let i = 0; i < fetchArr.length; i++) {
-                const ele = fetchArr[i];
-                let finally = (res) => {
-                    let index = res.index;
-                    baseHttp[index] = createPromise(ele, index);
-                    return Promise.race(baseHttp);
-                };
-                promise = promise.then(finally, finally);
-            }
+            promise = promise.then(finally, finally);
         }
-    ```
+    }
+```
 
 ## 调用
 
