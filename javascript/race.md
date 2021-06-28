@@ -2,6 +2,10 @@
 
 利用 Promise.race 实现一个可控异步并发数量请求函数，同时进行 N 个请求，直到所有请求结束。
 
+## Promise.race
+
+Promise.race(iterable) 方法返回一个 promise，一旦迭代器中的某个 promise 解决或拒绝，返回的 promise 就会解决或拒绝。
+
 ## 测试用例
 
 -   模拟请求
