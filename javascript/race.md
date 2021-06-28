@@ -118,12 +118,12 @@ function promiseCreator({ timeout, data }) {
             let promise = Promise.race(baseHttp);
             for (let i = 0; i < fetchArr.length; i++) {
                 const ele = fetchArr[i];
-                let thenable = (res) => {
+                let finally = (res) => {
                     let index = res.index;
                     baseHttp[index] = createPromise(ele, index);
                     return Promise.race(baseHttp);
                 };
-                promise = promise.then(thenable, thenable);
+                promise = promise.then(finally, finally);
             }
         }
     ```
