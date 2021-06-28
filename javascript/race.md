@@ -4,7 +4,7 @@
 
 ## Promise.race
 
-Promise.race(iterable) 方法返回一个 promise，一旦迭代器中的某个 promise 解决或拒绝，返回的 promise 就会解决或拒绝。
+[Promise.race(iterable) ](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise/race)方法返回一个 promise，一旦迭代器中的某个 promise 解决或拒绝，返回的 promise 就会解决或拒绝。
 
 ## 测试用例
 
@@ -30,19 +30,19 @@ function promiseCreator({ timeout, data }) {
 -   根据要求，我们需要一个接受 2 个参数的函数
 
     -   limit： 控制并发数量
-    -   fetchArr：请求作为数组传入
+    -   requestArr：请求作为数组传入
 
 -   开始实现，创建函数
 
     ```javascript
-    function fetchController(limit, fetchArr) {}
+    function requestController(limit, requestArr) {}
     ```
 
 -   我们需要根 limit 进行并发控制，所以需要先提取请求交给 Promise.race 去执行
 
     ```javascript
-    function fetchController(limit, fetchArr) {
-        let baseHttp = fetchArr.splice(0, limit);
+    function requestController(limit, requestArr) {
+        let baseHttp = requestArr.splice(0, limit);
         let promise = Promise.race(baseHttp.map((item) => item()));
     }
     ```
@@ -50,11 +50,11 @@ function promiseCreator({ timeout, data }) {
 -   此时开始执行并发请求，我们需要等待某个请求结束的同时进行下一个请求，将正在进行的请求与新开始的请求生成新的 Promise.race 执行，等待下一个请求函数完成。
 
     ```javascript
-    function fetchController(limit, fetchArr) {
-        let baseHttp = fetchArr.splice(0, limit);
+    function requestController(limit, requestArr) {
+        let baseHttp = requestArr.splice(0, limit);
         let promise = Promise.race(baseHttp.map((item) => item()));
-        for (let i = 0; i < fetchArr.length; i++) {
-            const ele = fetchArr[i];
+        for (let i = 0; i < requestArr.length; i++) {
+            const ele = requestArr[i];
             // 模拟实现
             // 假设之前race某个请求结束，这个请求在baseHttp的索引为 xxx
             // 我们只需要替换掉这个已经完成的请求，然后重新生成一个race就可以继续等待随后的请求结束，重复这个步骤
@@ -68,8 +68,8 @@ function promiseCreator({ timeout, data }) {
 -   从上面，我们可以发现，我们需要记录每一个请求结束时对应 baseHttp 数组内的索引，以此来重新生成新的 Promise.race，代码如下：
 
     ```javascript
-    function fetchController(limit, fetchArr) {
-        let baseHttp = fetchArr.splice(0, limit);
+    function requestController(limit, requestArr) {
+        let baseHttp = requestArr.splice(0, limit);
         let promise = Promise.race(
             baseHttp.map((item, index) => {
                 return item().then((res) => {
@@ -78,8 +78,8 @@ function promiseCreator({ timeout, data }) {
                 });
             })
         );
-        for (let i = 0; i < fetchArr.length; i++) {
-            const ele = fetchArr[i];
+        for (let i = 0; i < requestArr.length; i++) {
+            const ele = requestArr[i];
             promise = promise.then((res) => {
                 // 根据promise的链式调用，此时res值就为执行完成的请求在baseHttp下的索引。
                 let index = res;
@@ -97,7 +97,7 @@ function promiseCreator({ timeout, data }) {
 ## 整理代码
 
 ```javascript
-    function fetchController(limit, fetchArr) {
+    function requestController(limit, requestArr) {
         // promise化所有请求，根据实际自行增删，这里只是想到就写了
         // 保留了原本请求结束的结果，可以利用这个实现Promise.all 类似效果（除非原本请求没有接受请求结果，
         // 或者原本请求接收请求结果之后return 了这个结果，原因参见promise的链式调用）
@@ -112,13 +112,13 @@ function promiseCreator({ timeout, data }) {
             );
         };
 
-        let baseHttp = fetchArr
+        let baseHttp = requestArr
             .splice(0, limit)
             .map((item, index) => createPromise(item, index));
 
         let promise = Promise.race(baseHttp);
-        for (let i = 0; i < fetchArr.length; i++) {
-            const ele = fetchArr[i];
+        for (let i = 0; i < requestArr.length; i++) {
+            const ele = requestArr[i];
             let finally = (res) => {
                 let index = res.index;
                 baseHttp[index] = createPromise(ele, index);
@@ -159,7 +159,7 @@ let base = [
     },
 ];
 
-fetchController(
+requestController(
     2,
     base.map((item) => promiseCreator(item))
 );
