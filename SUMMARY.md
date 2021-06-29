@@ -19,7 +19,7 @@
 *   2021 随笔
 
     -   6 月
-        -   [React 的 scheduler](react/scheduler.md)
+        -   [利用race实现一个请求控制器](javascript/race.md)
         -   [http](network/http.md)
         -   [tcp](network/tcp.md)
         -   [new 简单实现](javascript/new.md)
