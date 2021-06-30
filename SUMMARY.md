@@ -19,7 +19,8 @@
 *   2021 随笔
 
     -   6 月
-        -   [利用race实现一个请求控制器](javascript/race.md)
+        -   [正则基础](regexp/base.md)
+        -   [利用 race 实现一个请求控制器](javascript/race.md)
         -   [http](network/http.md)
         -   [tcp](network/tcp.md)
         -   [new 简单实现](javascript/new.md)
@@ -33,6 +34,8 @@
         -   [KMP 算法](2021/kmp.md)
 
 *   RegExp
+
+    -   [正则基础](regexp/base.md)
 
 *   react
 
