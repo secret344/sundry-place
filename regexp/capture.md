@@ -124,6 +124,7 @@ date.replace(reg, (...args) => {
 let str = "my name is secret344, are you ok!";
 let reg = /\b([a-zA-Z])[a-zA-Z]*\b/g;
 str.replace(reg, (...args) => {
+    // 匹配一次执行一次
     // (4)[("my", "m", 0, "my name is secret344, are you ok!")];
     // (4)[("name", "n", 3, "my name is secret344, are you ok!")];
     // (4)[("is", "i", 8, "my name is secret344, are you ok!")];
