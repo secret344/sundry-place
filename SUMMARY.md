@@ -18,7 +18,13 @@
 
 *   2021 随笔
 
+    -   7 月
+
+        -   [正则捕获](regexp/capture.md)
+        -   [正则部分元字符](regexp/metacharacter.md)
+
     -   6 月
+        -   [正则基础](regexp/base.md)
         -   [利用 race 实现一个请求控制器](javascript/race.md)
         -   [http](network/http.md)
         -   [tcp](network/tcp.md)
@@ -33,6 +39,10 @@
         -   [KMP 算法](2021/kmp.md)
 
 *   RegExp
+
+    -   [正则基础](regexp/base.md)
+    -   [正则部分元字符](regexp/metacharacter.md)
+    -   [正则捕获](regexp/capture.md)
 
 *   react
 
