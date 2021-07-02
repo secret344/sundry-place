@@ -19,7 +19,7 @@
 *   2021 随笔
 
     -   6 月
-        -   [利用race实现一个请求控制器](javascript/race.md)
+        -   [利用 race 实现一个请求控制器](javascript/race.md)
         -   [http](network/http.md)
         -   [tcp](network/tcp.md)
         -   [new 简单实现](javascript/new.md)
@@ -44,11 +44,15 @@
     -   [typescript 装饰器](typescript/decorators.md)
 
 *   javascript
+
     -   [new 简单实现](javascript/new.md)
     -   [call、apply 简单实现](javascript/apply_call.md)
     -   [bind 简单实现](javascript/bind.md)
+
 *   HTML + CSS
+
     -   [定时器](html+css/Timers.md)
+
 *   计算机网络
     -   [http](network/http.md)
         -   [http 缓存](network/http-cache.md)
