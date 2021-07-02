@@ -1,7 +1,6 @@
 # Table of contents
 
 -   [sundry-place](README.md)
--   [google3e6c841857ba4cc8](google3e6c841857ba4cc8.html)
 
 *   算法
 
