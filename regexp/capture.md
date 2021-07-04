@@ -124,7 +124,6 @@ date.replace(reg, (...args) => {
 let str = "my name is secret344, are you ok!";
 let reg = /\b([a-zA-Z])[a-zA-Z]*\b/g;
 str.replace(reg, (...args) => {
-    // 匹配一次执行一次
     // (4)[("my", "m", 0, "my name is secret344, are you ok!")];
     // (4)[("name", "n", 3, "my name is secret344, are you ok!")];
     // (4)[("is", "i", 8, "my name is secret344, are you ok!")];
@@ -136,4 +135,86 @@ str.replace(reg, (...args) => {
     content = content.substring(1);
     return $1 + content;
 }); // "My Name Is secret344, Are You Ok!"
+```
+
+## 案例
+
+-   查找一个字符串中，字母出现最多的字母。
+
+```javascript
+let str = "ashdihfklahduagsidkmalsjdhddddd"; // d
+let result = "";
+let max = 0;
+let letter;
+let reg;
+
+while (!!str) {
+    let oldLength = str.length;
+    letter = str.substr(0, 1);
+    reg = new RegExp(letter, "g");
+    str = str.replace(reg, "");
+    let newLength = str.length;
+    let letterLength = oldLength - newLength;
+    if (letterLength > max) {
+        max = letterLength;
+        result = letter;
+    }
+}
+```
+
+-   时间字符串格式化
+    2021-07-04 21:26:3;
+    2021/07/04 21:26:3; =>
+    08 月 13 日 21 时 26 分;
+    2021 年 07 月 04 日;
+
+```javascript
+let timeStr = "2021-07-04 21:26:3";
+function formatTime(
+    timeStr = "2021-07-04 21:26:3",
+    templete = "{1}年{2}月{3}日 {4}时{5}分{6}秒"
+) {
+    // 获取年月日
+    let timeArr = timeStr.match(/\d+/g);
+    return templete.replace(/\{(\d+)\}/g, (...args) => {
+        let [content, $1] = args;
+        let time = timeArr[$1 - 1] || "00";
+        return time.length < 2 ? (time = "0" + time) : time;
+    });
+}
+formatTime();
+```
+
+-   queryURLParams
+
+```javascript
+function queryURLParams(url = "https://www.xxx.com.cn/?x=1&c=2&d=12#id") {
+    let result = {};
+    url.replace(/([^?=&#]+)=([^?=&#]+)/g, (...args) => {
+        let [content, $1, $2] = args;
+        result[$1] = $2;
+        return content;
+    });
+    url.replace(/#([^?=&#]+)/g, (...args) => {
+        let [content, $1] = args;
+        result["HASH"] = $1;
+        return content;
+    });
+    return result;
+}
+queryURLParams();
+```
+
+-   千分符
+
+```javascript
+let num = 12387263784619823;
+function millimeter(num = 12387263784619823) {
+    num = "" + num;
+    return num.replace(/\d{1,3}(?=(\d{3})+$)/g, (...args) => {
+        let [content] = args;
+        return content + ",";
+    });
+}
+millimeter();
 ```
