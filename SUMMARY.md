@@ -2,20 +2,6 @@
 
 -   [sundry-place](README.md)
 
-*   算法
-
-    -   常见排序查找
-        -   [十大经典排序](2021/sort.md)
-    -   前缀和
-
-        -   [注解](arithmetic/PrefixSum/note.md)
-        -   [1738. 找出第 K 大的异或坐标值](arithmetic/PrefixSum/1738.md)
-
-    -   基本常识
-
-    -   [逻辑运算](arithmetic/base/logical_operation.md)
-    -   [KMP 算法](2021/kmp.md)
-
 *   2021 随笔
 
     -   7 月
@@ -64,6 +50,7 @@
     -   [定时器](html+css/Timers.md)
 
 *   计算机网络
+
     -   [http](network/http.md)
         -   [http 缓存](network/http-cache.md)
         -   [http 历史](network/http-history.md)
@@ -71,3 +58,17 @@
         -   [http cors](network/http-cors.md)
     -   [tcp](network/tcp.md)
         -   [tcp 滑动窗口](network/SlidingWindowProtocol.md)
+
+*   算法
+
+    -   常见排序查找
+        -   [十大经典排序](2021/sort.md)
+    -   前缀和
+
+        -   [注解](arithmetic/PrefixSum/note.md)
+        -   [1738. 找出第 K 大的异或坐标值](arithmetic/PrefixSum/1738.md)
+
+    -   基本常识
+
+    -   [逻辑运算](arithmetic/base/logical_operation.md)
+    -   [KMP 算法](2021/kmp.md)
