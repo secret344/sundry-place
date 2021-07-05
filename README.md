@@ -7,4 +7,4 @@
 
 ## 因过竹院逢僧话，偷得浮生半日闲。
 
--   [SUMMARY gitbook 目录](./SUMMARY.md)
+-   [**目录**](./SUMMARY.md)
