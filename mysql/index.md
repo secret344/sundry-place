@@ -23,36 +23,38 @@ city VARCHAR ( 64 ) DEFAULT '北京'
 
 -   如何增加约束
 
-```sql
-CREATE TABLE `xxxxx` (
-id INT ( 11 ) NOT NULL,
-name VARCHAR ( 64 ) NOT NULL,
-age INT ( 11 ) DEFAULT NULL,
-city VARCHAR ( 64 ) DEFAULT '北京'
-);
-```
-
--   增加主键
     ```sql
-    ALTER TABLE xxxxx ADD PRIMARY KEY(id);
+    CREATE TABLE `xxxxx` (
+    id INT ( 11 ) NOT NULL,
+    name VARCHAR ( 64 ) NOT NULL,
+    age INT ( 11 ) DEFAULT NULL,
+    city VARCHAR ( 64 ) DEFAULT '北京'
+    );
     ```
--   增加唯一约束索引
 
-```sql
-   ALTER TABLE xxxxx ADD UNIQUE INDEX idx_student_idcard(idcard);
-```
+    -   增加主键
 
--   增加默认约束
+        ```sql
+        ALTER TABLE xxxxx ADD PRIMARY KEY(id);
+        ```
 
-```sql
-   ALTER TABLE xxxxx MODIFY COLUMN city VARCHAR(64) DEFAULT '西藏';
-```
+    -   增加唯一约束索引
 
--   外键
+    ```sql
+       ALTER TABLE xxxxx ADD UNIQUE INDEX idx_student_idcard(idcard);
+    ```
 
-```sql
-   ALTER TABLE score ADD CONSTRAINT fk_score_student_id FOREIGN KEY(student_id) REFERENCES student(id);
-```
+    -   增加默认约束
+
+    ```sql
+       ALTER TABLE xxxxx MODIFY COLUMN city VARCHAR(64) DEFAULT '西藏';
+    ```
+
+    -   外键
+
+    ```sql
+       ALTER TABLE score ADD CONSTRAINT fk_score_student_id FOREIGN KEY(student_id) REFERENCES student(id);
+    ```
 
 -   SQL
     -   DDL Data Define Language 数据定义语言，定义数据库和表的数据结构的。
