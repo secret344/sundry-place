@@ -241,3 +241,57 @@ WHERE grade < 60
 GROUP BY student_id
 HAVING COUNT(*) > 1;
 ```
+
+## 聚合函数
+
+```sql
+SELECT * FROM student;
+
+-- 年龄
+SELECT SUM(age) FROM student; -- 271
+
+SELECT SUM(age) FROM student WHERE city = '南京'; -- 64
+
+SELECT COUNT(*) FROM student WHERE  city = '南京'; -- 2
+
+SELECT MAX(age) FROM student; -- 123
+SELECT MAX(age) FROM student WHERE  city = '南京';  -- 32
+SELECT MIN(age) FROM student; -- 12
+
+
+-- 改密码
+SELECT Host,User,authentication_string FROM mysql.user; -- authentication_string : *4ACFE3202A5FF5CF467898FC58AAB1D615029441
+SELECT PASSWORD("admin"); -- *4ACFE3202A5FF5CF467898FC58AAB1D615029441
+-- UPDATE mysql.user SET Password=PASSWORD('admin') WHERE User = 'root';
+```
+
+## 锁 表
+
+```sql
+ CREATE TABLE users_clock_table (
+	id int not null auto_increment, CREATE TABLE users_clock_table (
+	id int not null auto_increment,
+	name VARCHAR(20) DEFAULT null,
+	PRIMARY KEY (id)
+ ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+	name VARCHAR(20) DEFAULT null,
+	PRIMARY KEY (id)
+ ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+INSERT INTO users_clock_table (id,name) VALUES(1,'a');
+INSERT INTO users_clock_table (id,name) VALUES(2,'b');
+INSERT INTO users_clock_table (id,name) VALUES(3,'c');
+INSERT INTO users_clock_table (id,name) VALUES(4,'d');
+
+SELECT * FROM users_clock_table
+
+
+LOCK TABLE users_clock_table READ;
+INSERT INTO users_clock_table (id,name) VALUES (5,'e');
+UNLOCK TABLES;
+
+LOCK TABLE users_clock_table WRITE;
+INSERT INTO users_clock_table (id,name) VALUES (6,'f');
+UNLOCK TABLES;
+
+```
