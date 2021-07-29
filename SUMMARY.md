@@ -6,6 +6,7 @@
 
     -   7 月
 
+        -   [mysql](mysql/index.md)
         -   [正则捕获](regexp/capture.md)
         -   [正则部分元字符](regexp/metacharacter.md)
 
@@ -72,3 +73,9 @@
 
         -   [逻辑运算](arithmetic/base/logical_operation.md)
         -   [KMP 算法](2021/kmp.md)
+
+-   数据库
+    -   mysql
+        -   [基础](mysql/index.md)
+        -   [无限分类](mysql/Infinite_classification.md)
+        -   [查询](mysql/query.md)
