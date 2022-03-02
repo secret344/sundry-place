@@ -35,7 +35,7 @@ p:   5 6 7
 当只存在上述计算时，有可能会计算出很大的值，导致溢出，所以我们要对hash计算进行mod运算。
 此时,计算方式修改为：
 
-> hash[x] =(...(((((hash[x] * r) mod q + hash[x - 1]) * r)mod q + hash[x - 2]) * r)mod q ... + hash[0]...) mod q
+> hash[x] =(...(((((Hash[x] mod q * r) + Hash[x - 1]) mod q  * r) + Hash[x - 2]) mod q * r ... + Hash[0]) mod q
 
 1. 当我们在计算 最高位 的位次时发现，
   - Hash[x] = ((((((((Hash[x] mod q) * r) mod q) * r) mod q)*r)mod q) ... * r) mod q 
@@ -48,7 +48,54 @@ p:   5 6 7
 ### 根据以上可以实现算法
 
 ```JavaScript
-    function RabinKarp(s, p){
-        let
+class RabinKarp {
+    constructor(str) {
+        this.str = str
+        this.primeNum = 101
+        this.base = 256
     }
+    getStrNum(s) {
+        return s.codePointAt(0)
+    }
+    search(p) {
+        let M = this.str.length
+        let N = p.length
+        let h = 1
+        //  h ≡ r^m-1(% q)
+        for (let i = 0; i < N - 1; i++) {
+        h = (h * this.base) % this.primeNum
+        }
+
+        let t1 = 0
+        let t2 = 0
+        // hash[x] =(...(((((Hash[x] mod q * r) + Hash[x - 1]) mod q  * r) + Hash[x - 2]) mod q * r ... + Hash[0]) mod q
+        for (let i = 0; i < N; i++) {
+        t1 = (t1 * this.base + this.getStrNum(this.str[i])) % this.primeNum
+        t2 = (t2 * this.base + this.getStrNum(p[i])) % this.primeNum
+        }
+
+        for (let i = 0; i <= M - N; i++) {
+        console.log(t1, t2);
+        if (t1 == t2) {
+            let j;
+            for (j = 0; j < N; j++) {
+            if (this.str[j + i] != p[j]) {
+                break;
+            }
+            }
+            if (j == N) return i
+        }
+
+        if (i < M - N) {
+            //  hash[x + 1] = (( hash[x] - Hash[x] * h ) * r + Hash[x + m]) % q
+            t1 = ((t1 - this.getStrNum(this.str[i]) * h) * this.base + this.getStrNum(this.str[i + N])) % this.primeNum
+            // t1 有可能小于0
+            if (t1 < 0) t1 += this.primeNum
+        }
+        }
+    }
+}
+
+r = new RabinKarp("cabc");
+console.log(r.search("abc")); // 1
 ```
