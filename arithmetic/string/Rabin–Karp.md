@@ -63,35 +63,34 @@ class RabinKarp {
         let h = 1
         //  h ≡ r^m-1(% q)
         for (let i = 0; i < N - 1; i++) {
-        h = (h * this.base) % this.primeNum
+            h = (h * this.base) % this.primeNum
         }
 
         let t1 = 0
         let t2 = 0
         // hash[x] =(...(((((Hash[x] mod q * r) + Hash[x - 1]) mod q  * r) + Hash[x - 2]) mod q * r ... + Hash[0]) mod q
         for (let i = 0; i < N; i++) {
-        t1 = (t1 * this.base + this.getStrNum(this.str[i])) % this.primeNum
-        t2 = (t2 * this.base + this.getStrNum(p[i])) % this.primeNum
+            t1 = (t1 * this.base + this.getStrNum(this.str[i])) % this.primeNum
+            t2 = (t2 * this.base + this.getStrNum(p[i])) % this.primeNum
         }
 
         for (let i = 0; i <= M - N; i++) {
-        console.log(t1, t2);
-        if (t1 == t2) {
-            let j;
-            for (j = 0; j < N; j++) {
-            if (this.str[j + i] != p[j]) {
-                break;
+            if (t1 == t2) {
+                let j;
+                for (j = 0; j < N; j++) {
+                    if (this.str[j + i] != p[j]) {
+                        break;
+                    }
+                }
+                if (j == N) return i
             }
-            }
-            if (j == N) return i
-        }
 
-        if (i < M - N) {
-            //  hash[x + 1] = (( hash[x] - Hash[x] * h ) * r + Hash[x + m]) % q
-            t1 = ((t1 - this.getStrNum(this.str[i]) * h) * this.base + this.getStrNum(this.str[i + N])) % this.primeNum
-            // t1 有可能小于0
-            if (t1 < 0) t1 += this.primeNum
-        }
+            if (i < M - N) {
+                //  hash[x + 1] = (( hash[x] - Hash[x] * h ) * r + Hash[x + m]) % q
+                t1 = ((t1 - this.getStrNum(this.str[i]) * h) * this.base + this.getStrNum(this.str[i + N])) % this.primeNum
+                // t1 有可能小于0
+                if (t1 < 0) t1 += this.primeNum
+            }
         }
     }
 }
