@@ -1,6 +1,6 @@
 # React 的 scheduler
 
-1. 从 react 源码可知，react 通过 ensureRootIsScheduled 将 fiber 树推入构建流程
+### 1. 从 react 源码可知，react 通过 ensureRootIsScheduled 将 fiber 树推入构建流程
 
 ```javascript
 function ensureRootIsScheduled(root, currentTime) {
@@ -44,7 +44,7 @@ function ensureRootIsScheduled(root, currentTime) {
 
 > 这里在交给 scheduler 调度时做了一层优先级转化，这是因为 react 和 scheduler 各有一套优先级机制。
 
-2. 接下来查看 scheduleCallback 的代码，对应 scheduler 中的 unstable_scheduleCallback
+### 2. 接下来查看 scheduleCallback 的代码，对应 scheduler 中的 unstable_scheduleCallback
 
 ```javascript
 function unstable_scheduleCallback(priorityLevel, callback, options) {
@@ -143,7 +143,7 @@ function unstable_scheduleCallback(priorityLevel, callback, options) {
 
 > scheduleCallback 主要任务就是根据 react 事件创建一个 scheduler 任务，根据任务开始时间判断任务过期时间，未过期的任务会加入 timerQueue 中，将 starttime 作为排序依据，过期的任务会存放到 taskQueue，将 expirationTime 作为排序依据。当 taskQueue 不存在任务时，如果此时新添加任务是一个延时开始任务，那么将会调用 requestHostTimeout 生成一个 settimeout，将第一个任务延时时间作为间隔时间，到期后调用 handleTimeout。当加入的是非延时开始任务时，直接加入 taskQueue，并判断当前是否存在调度者正在进行任务调度，不存在创建，存在则跳过。 3. handleTimeout 最终还是调用 requestHostCallback，所以我们直接从 handleTimeout 开始看。
 
-3. handleTimeout
+### 3. handleTimeout
 
 ```javascript
 function handleTimeout(currentTime) {
@@ -172,7 +172,7 @@ function handleTimeout(currentTime) {
 
 > handleTimeout 主要任务时检查延时开始任务是否已经开始，开始就将其放入 taskQueue。 这个操作是由 advanceTimers 完成的。
 
-4. advanceTimers
+### 4. advanceTimers
 
 ```javascript
 function advanceTimers(currentTime) {
@@ -210,7 +210,7 @@ if (peek(taskQueue) !== null) {
 }
 ```
 
-5. requestHostCallback
+### 5. requestHostCallback
 
 ```javascript
 function requestHostCallback(callback) {
@@ -259,7 +259,7 @@ if (typeof setImmediate === "function") {
 
 > schedulePerformWorkUntilDeadline 函数主要创建一个调度者，去执行 performWorkUntilDeadline
 
-6. performWorkUntilDeadline
+### 6. performWorkUntilDeadline
 
 ```javascript
 var performWorkUntilDeadline = function () {
@@ -297,7 +297,7 @@ var performWorkUntilDeadline = function () {
 
 > performWorkUntilDeadline 主要任务是 将当前帧所能执行的任务时间赋给 deadline，当作最后期限。然后执行 flushWork 开启真正的 workloop。当 flushwork 结束时，检查 flushwork 执行状态，如果存在任务中断，则重新开启一个新的调度者，不存在则初始化状态。
 
-7. flushwork
+### 7. flushwork
 
 ```javascript
 function flushWork(hasTimeRemaining, initialTime) {
@@ -343,7 +343,7 @@ function flushWork(hasTimeRemaining, initialTime) {
 
 > flushWork 真正执行的是 workLoop ，并且在结束时重置相关状态。flushWork 返回 workLoop 的返回值
 
-8. workLoop 真正的工作循环
+### 8. workLoop 真正的工作循环
 
 ```javascript
 function workLoop(hasTimeRemaining, initialTime) {
@@ -456,14 +456,14 @@ function workLoop(hasTimeRemaining, initialTime) {
   - 不是 null 表明存在中断，返回 true
 - workloop 执行结束
 
-9. workLoop 结束后，返回。
+### 9. workLoop 结束后，返回。
 
    - 此时回到 flushWork，然后回到 performWorkUntilDeadline
    - 当返回值为 true 时，hasMoreWork 为 true
      - 执行 schedulePerformWorkUntilDeadline（->performWorkUntilDeadline->scheduledHostCallback(flushWork)） 开启下次
    - 为 false，重置状态，结束。
 
-10. callback 任务执行
+### 10. callback 任务执行
 
 - 此时我们回到 workLoop ，在执行 callback 会传入 didUserCallbackTimeout（任务是否过期）
 - 此时 callback 就是我们开始所说，react 执行 scheduleCallback 传入的第二个参数
@@ -483,7 +483,7 @@ function workLoop(hasTimeRemaining, initialTime) {
   - scheduleCallback 生成的任务会交给 root.callbackNode
   - 可见，执行 callback 其实就是执行 performConcurrentWorkOnRoot
 
-11. performConcurrentWorkOnRoot
+### 11. performConcurrentWorkOnRoot
 
 ```javascript
   function shouldTimeSlice(root, lanes) {
@@ -521,7 +521,7 @@ function workLoop(hasTimeRemaining, initialTime) {
 
 > performConcurrentWorkOnRoot 会根据条件判断然后去执行 renderRootConcurrent 或者 renderRootSync，因为 renderRootSync 是同步任务，不会被中断，我们接下来只看 renderRootConcurrent
 
-12. renderRootConcurrent 我们只看有关 scheduler 的代码
+### 12. renderRootConcurrent 我们只看有关 scheduler 的代码
 
 ```JavaScript
 function renderRootConcurrent(root, lanes) {
@@ -540,7 +540,7 @@ function renderRootConcurrent(root, lanes) {
 
 > 内部调用 workLoopConcurrent
 
-13. workLoopConcurrent
+### 13. workLoopConcurrent
 
 ```javascript
 function workLoopConcurrent() {
