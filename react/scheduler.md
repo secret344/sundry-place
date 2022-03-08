@@ -388,10 +388,11 @@ function workLoop(hasTimeRemaining, initialTime) {
       currentTime = exports.unstable_now();
 
       if (typeof continuationCallback === "function") {
-        // 发生中断
+        // 发生中断 让出执行权给优先级最高的任务
         currentTask.callback = continuationCallback;
       } else {
         // 执行结束 删除执行完的任务
+        // 只有 taskQueue 首个任务是当前任务才会被删除，防止误删新的高优先级任务
         if (currentTask === peek(taskQueue)) {
           pop(taskQueue);
         }
@@ -426,57 +427,62 @@ function workLoop(hasTimeRemaining, initialTime) {
 }
 ```
 
->  workLoop 开始就是进行真正的任务调度，它分为3部分
+> workLoop 开始就是进行真正的任务调度，它分为 3 部分
 
-  -  首先检查 timerQueue 是否有可以放入 taskQueue 的任务。
-  -  开始进行 任务调度
-    -  while 循环判断 taskQueue 的第一个任务（优先级最高）,如果存在，继续判断当前是否需要执行task
+- 首先检查 timerQueue 是否有可以放入 taskQueue 的任务。
+- 开始进行 任务调度
+- while 循环判断 taskQueue 的第一个任务（优先级最高）,如果存在，继续判断当前是否需要执行 task
 
-      ```javascript
-       if (
-          currentTask.expirationTime > currentTime &&
-          (!hasTimeRemaining || shouldYieldToHost())
-        ) {
-          break;
-        }
-      ```
-      > 当前帧执行时间已经到达最后期限 且 当前 taskQueue 里面的任务还未到过期时间，终止当前 workloop, 下一个事件循环开始调度。
+  ```javascript
+   if (
+      currentTask.expirationTime > currentTime &&
+      (!hasTimeRemaining || shouldYieldToHost())
+    ) {
+      break;
+    }
+  ```
 
-    -  拿到要执行的 callback （真正需要执行的函数）
-    -  判断当前任务（callback）是否是一个函数，不是直接 pop 掉该任务，已经被取消掉了。
-       -  是一个函数，保存当前优先级 currentPriorityLevel（调度结束会恢复默认（NormalPriority）），开始进行调度。
-       -  判断 callback 的返回值
-          -  判断 callback 的返回值，如果是一个函数，表明任务未执行完毕，将当前任务的 callback 替换为该函数
-          -  如果 callback 的返回值不是一个函数，表明任务执行结束，判断 当前任务是否是 taskQueue 头，是则 pop
-       -  然后执行 advanceTimers，完毕后本次循环结束。
-    -  执行结束，判断 currentTask 是否为 null
-       -  是null表明当前 taskQueue 已经被清空，判断 timerQueue 是否为空，不为空则开启下次  requestHostTimeout。然后返回 false
-       -  不是 null 表明存在中断，返回true
-  - workloop 执行结束
+  > 当前帧执行时间已经到达最后期限 且 当前 taskQueue 里面的任务还未到过期时间，终止当前 workloop, 下一个事件循环开始调度。
 
-9. workLoop结束后，返回。
+- 拿到要执行的 callback （真正需要执行的函数）
+- 判断当前任务（callback）是否是一个函数，不是直接 pop 掉该任务，已经被取消掉了。
+  - 是一个函数，保存当前优先级 currentPriorityLevel（调度结束会恢复默认（NormalPriority）），开始进行调度。
+  - 判断 callback 的返回值
+    - 判断 callback 的返回值，如果是一个函数，表明任务未执行完毕，将当前任务的 callback 替换为该函数
+    - 如果 callback 的返回值不是一个函数，表明任务执行结束，判断 当前任务是否是 taskQueue 头，是则 pop
+  - 然后执行 advanceTimers，完毕后本次循环结束。
+- 执行结束，判断 currentTask 是否为 null
+  - 是 null 表明当前 taskQueue 已经被清空，判断 timerQueue 是否为空，不为空则开启下次 requestHostTimeout。然后返回 false
+  - 不是 null 表明存在中断，返回 true
+- workloop 执行结束
+
+9. workLoop 结束后，返回。
+
    - 此时回到 flushWork，然后回到 performWorkUntilDeadline
    - 当返回值为 true 时，hasMoreWork 为 true
      - 执行 schedulePerformWorkUntilDeadline（->performWorkUntilDeadline->scheduledHostCallback(flushWork)） 开启下次
-   - 为false，重置状态，结束。
+   - 为 false，重置状态，结束。
 
 10. callback 任务执行
-   - 此时我们回到 workLoop ，在执行 callback 会传入 didUserCallbackTimeout（任务是否过期）
-   - 此时 callback 就是我们开始所说，react执行 scheduleCallback 传入的第二个参数
-      ```JavaScript
-      ...
-        newCallbackNode = scheduleCallback(
-        schedulerPriorityLevel,
-        performConcurrentWorkOnRoot.bind(null, root)
-          );
-      }
 
-      root.callbackPriority = newCallbackPriority;
-      root.callbackNode = newCallbackNode;
-      ```
-      - scheduleCallback 生成的任务会交给 root.callbackNode
-      - 可见，执行callback 其实就是执行 performConcurrentWorkOnRoot
-  
+- 此时我们回到 workLoop ，在执行 callback 会传入 didUserCallbackTimeout（任务是否过期）
+- 此时 callback 就是我们开始所说，react 执行 scheduleCallback 传入的第二个参数
+
+  ```JavaScript
+  ...
+    newCallbackNode = scheduleCallback(
+    schedulerPriorityLevel,
+    performConcurrentWorkOnRoot.bind(null, root)
+      );
+  }
+
+  root.callbackPriority = newCallbackPriority;
+  root.callbackNode = newCallbackNode;
+  ```
+
+  - scheduleCallback 生成的任务会交给 root.callbackNode
+  - 可见，执行 callback 其实就是执行 performConcurrentWorkOnRoot
+
 11. performConcurrentWorkOnRoot
 
 ```javascript
@@ -485,7 +491,7 @@ function workLoop(hasTimeRemaining, initialTime) {
       // 已经存在过期lane,为了防止更多饥饿任务
       return false;
     }
-    // 不存在过期 判断是否含有 默认同步lane 
+    // 不存在过期 判断是否含有 默认同步lane
     // 连续触发优先级，例如：滚动事件，拖动事件等 InputContinuousHydrationLane InputContinuousLane
     // 默认优先级，例如使用setTimeout，请求数据返回等造成的更新 DefaultHydrationLane DefaultLane
     var SyncDefaultLanes = InputContinuousHydrationLane | InputContinuousLane | DefaultHydrationLane | DefaultLane;
@@ -507,7 +513,7 @@ function workLoop(hasTimeRemaining, initialTime) {
     // 没有执行到commit阶段 就发生中断
     if (root.callbackNode === originalCallbackNode) {
       return performConcurrentWorkOnRoot.bind(null, root);
-    } 
+    }
     // 执行完毕
     return null;
   }
@@ -515,11 +521,10 @@ function workLoop(hasTimeRemaining, initialTime) {
 
 > performConcurrentWorkOnRoot 会根据条件判断然后去执行 renderRootConcurrent 或者 renderRootSync，因为 renderRootSync 是同步任务，不会被中断，我们接下来只看 renderRootConcurrent
 
-12. renderRootConcurrent 我们只看有关 scheduler的代码
+12. renderRootConcurrent 我们只看有关 scheduler 的代码
 
 ```JavaScript
 function renderRootConcurrent(root, lanes) {
- 
   ...
   do {
     try {
@@ -529,27 +534,37 @@ function renderRootConcurrent(root, lanes) {
       handleError(root, thrownValue);
     }
   } while (true);
+  ...
+}
+```
 
-  resetContextDependencies();
-  popDispatcher(prevDispatcher);
-  executionContext = prevExecutionContext;
+> 内部调用 workLoopConcurrent
 
+13. workLoopConcurrent
 
-  if (workInProgress !== null) {
-    // Still work remaining.
-    {
-      markRenderYielded();
-    }
-
-    return RootIncomplete;
-  } else {
-    // Completed the tree.
-    {
-      markRenderStopped();
-    } // Set this to null to indicate there's no in-progress render.
-    workInProgressRoot = null;
-    workInProgressRootRenderLanes = NoLanes; // Return the final exit status.
-    return workInProgressRootExitStatus;
+```javascript
+function workLoopConcurrent() {
+  // Perform work until Scheduler asks us to yield
+  while (workInProgress !== null && !shouldYield()) {
+    performUnitOfWork(workInProgress);
   }
 }
 ```
+
+> 该函数在循环创建 workInProgress 树，在每个单元执行完会判断 shouldYield 是否需要中断，当需要中断时，会停止循环。之前我们知道在执行commit阶段会重置 root.callbackNode = null,而且 commit 是不能被终端的。那么 root.callbackNode === originalCallbackNode，performConcurrentWorkOnRoot 函数就会返回 performConcurrentWorkOnRoot 作为 continuationCallback 的值。然后让出执行权。
+
+此时，workLoop执行结束，如果存在终端，将 continuationCallback 赋值给 currentTask.callback，接着执行一次advanceTimers，然后取出最高优先级任务继续下次循环，如果执行时间过长导致的中断，跳出while。
+
+跳出while之后会判断 currentTask 是否为 null，不为null表示还有任务未完成，返回 true，如果为 null，判断 timerQueue 是否存在任务，存在则调用requestHostTimeout等待间隔时间后开启下次调度，然后返回false。
+
+此时，workloop结束，函数返回到 flushWork，flushWork会返回 workloop的返回值，然后重置状态。
+
+flushWork结束， 返回到 performWorkUntilDeadline ，将上一步的返回值赋给 hasMoreWork，当hasMoreWork为true时，执行 schedulePerformWorkUntilDeadline 进行下次任务的调度。false则表示任务执行完毕，重置状态。结束。
+
+此时我们就完成了对 react scheduler的探索。
+
+## 总结：
+    
+react scheduler 核心就是使用小根堆维护 两个任务队列 timerQueue 以及 taskQueue，每次调度都是循环 taskQueue 进行执行，在适当时候使用 advanceTimers 将 timerQueue 放入 taskQueue 中进行调度。
+
+scheduler 创建调度器时，优先使用 setImmediate 次要使用 MessageChannel，因为 MessageChannel 在nodejs环境下会阻止nodejs进程的退出，而 setImmediate 不会。
