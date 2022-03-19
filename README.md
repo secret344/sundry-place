@@ -13,7 +13,7 @@
 - 2022
 
   - 3 月
-  
+    - [初识 LFU](arithmetic/cache/LFU.md)
     - [React 的 scheduler](react/scheduler.md)
     - [Rabin–Karp](arithmetic/string/Rabin–Karp.md)
 
