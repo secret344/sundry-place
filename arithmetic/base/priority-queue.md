@@ -67,8 +67,8 @@ class PriorityQueue {
     let length = this.queue.length;
     // 向下调整 需要判断子节点当前最小的值 与父节点进行替换
 
-    // 我们只需要保证 index < 当前长度的一半（当刚好大于时，
-    // 表示接下来将会进入树的最后一层进行判断）
+    // 我们只需要保证 index < 当前长度的一半（当刚好大于等于时，
+    // 表示此时index是树的最后一层）
     let halfLength = length >>> 1;
 
     while (index < halfLength) {
