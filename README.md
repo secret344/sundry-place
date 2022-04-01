@@ -90,7 +90,17 @@
 - 算法
 
   - 常见排序查找
+
     - [十大经典排序](2021/sort.md)
+
+  - 优先队列
+
+    - [优先队列](arithmetic/base/priority-queue.md)
+
+  - 缓存
+
+    - [初识 LFU](arithmetic/cache/LFU.md)
+
   - 前缀和
 
     - [注解](arithmetic/PrefixSum/note.md)
