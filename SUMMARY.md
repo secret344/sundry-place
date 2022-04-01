@@ -4,6 +4,10 @@
 
 * 2022
 
+  - 4 月
+
+    - [优先队列](arithmetic/base/priority-queue.md)
+
   - 3 月
 
     - [初识 LFU](arithmetic/cache/LFU.md)
