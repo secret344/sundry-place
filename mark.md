@@ -1,0 +1,2 @@
+- st表 sparse table
+- 线段树
