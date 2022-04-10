@@ -14,6 +14,7 @@
 
   - 4 月
 
+    - [并查集](arithmetic/base/disjoint-set.md)
     - [优先队列](arithmetic/base/priority-queue.md)
 
   - 3 月
@@ -110,6 +111,10 @@
 
     - [KMP 算法](arithmetic/string/kmp.md)
     - [Rabin–Karp](arithmetic/string/Rabin–Karp.md)
+
+  - 并查集
+
+    - [并查集](arithmetic/base/disjoint-set.md)
 
   - 基本常识
 
